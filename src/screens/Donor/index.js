@@ -72,6 +72,7 @@ const Donor = () => {
     axios
       .post(`${baseUrl}/api/v1/donation/makeDonation/${id}`, data, config)
       .then(data => {
+        fetchData();
         console.log('donated ----------------!!!!!');
         dispatch(loaderOff());
         showToast({type: 'success', text: 'Donated successfully'});
@@ -80,11 +81,12 @@ const Donor = () => {
       .catch(error => {
         if (error.response.status >= 500) {
           dispatch(loaderOff());
+
           return showToast({
             type: 'error',
             text: error.response.data?.error
               ? error.response.data?.error
-              : error.response.data.errors[0]?.msg,
+              : error.response.data?.errors[0]?.msg,
           });
         }
         console.log(error);
@@ -95,12 +97,13 @@ const Donor = () => {
             ? error.response.data?.error
             : error.response.data.errors[0]?.msg,
         });
+        fetchData();
       });
   };
 
   const fetchData = async () => {
     const token = await AsyncStorage.getItem('token');
-    console.log(token);
+    console.log('token', token);
     const config = {
       headers: {
         'x-auth-token': token,
@@ -109,7 +112,7 @@ const Donor = () => {
 
     try {
       dispatch(loaderOn());
-      const res = await axios.get(`${baseUrl}/api/v1/adcatc/live`, config);
+      const res = await axios.get(`${baseUrl}/api/v1/ad/live`, config);
       if (res.status === 200) {
         console.log(res.data);
         // dispatch(loaderOff())

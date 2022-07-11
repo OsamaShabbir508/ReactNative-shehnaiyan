@@ -32,7 +32,6 @@ const Acceptor = props => {
     {label: 'Rent  ', value: 1},
   ];
   const selectIamge = onchange => {
-
     console.log('select image -----');
     launchImageLibrary(
       {
@@ -93,12 +92,12 @@ const Acceptor = props => {
     // console.log(dt);
     const formData = getValues();
     const token = await AsyncStorage.getItem('token');
-    console.log(formData.adDeliveryDate, 'datteeeee');
+    // console.log(formData.adDeliveryDate, 'datteeeee');
     //return;
     const data = {
       CNICImage: formData.CNICImage,
       applicantAddress: formData.applicantHomeAdd,
-      applicantCNIC: formData.applicantCnic,
+      applicantCNIC: Number(formData.applicantCnic),
       applicantContactNo: formData.applicantContact,
       applicantJobOccupation: formData.applicantJobOcc,
       applicantName: formData.applicantName,
@@ -114,14 +113,17 @@ const Acceptor = props => {
       itemsNeeded: formData.itemsNeeded,
       totalAmount: 39082,
     };
-    console.log(data.deliveryDate);
+    // console.log(data.deliveryDate);
     const config = {
       headers: {
         'x-auth-token': token,
       },
     };
-    if (data.deliveryDate=='') {
-      return  showToast({type: 'error', text: 'DeliveryDate  must be a valid date'});
+    if (data.deliveryDate == '') {
+      return showToast({
+        type: 'error',
+        text: 'DeliveryDate  must be a valid date',
+      });
     }
     try {
       dispatch(loaderOn());
@@ -129,15 +131,18 @@ const Acceptor = props => {
       dispatch(loaderOff());
       showToast({type: 'success', text: 'Your Ads posted successfully'});
     } catch (error) {
-      console.log(error.response);
-      if (error.response.status>=500) {
+      console.log(error.response.data);
+      if (error.response.status >= 500) {
         dispatch(loaderOff());
-        return  showToast({type:'error',text:'Something went wrong or Server error!'})
+        return showToast({
+          type: 'error',
+          text: 'Something went wrong or Server error!',
+        });
       }
       dispatch(loaderOff());
-      console.log(error.response);
-     // showToast({type: 'error',text:error.response.data.errors[0].msg});
-      console.log(error.toString());
+      // console.log(error.response);
+      showToast({type: 'error', text: error.response.data});
+      // console.log(error.toString());
     }
   };
   const needed = [
@@ -155,18 +160,22 @@ const Acceptor = props => {
         style={{
           padding: Metrix.VerticalSize(15),
         }}>
-          <TouchableOpacity onPress={async()=>{
-            await AsyncStorage.multiRemove(['userType','token'])
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.multiRemove(['userType', 'token']);
             dispatch(removeUser());
           }}>
-            <Text style={{
-              textAlign:'left',
-              margin:Metrix.VerticalSize(12),
-              fontSize:18,
-              fontWeight:'bold',
-              color:Colors.darkBlue
-            }}>Log Out</Text>
-          </TouchableOpacity>
+          <Text
+            style={{
+              textAlign: 'left',
+              margin: Metrix.VerticalSize(12),
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: Colors.darkBlue,
+            }}>
+            Log Out
+          </Text>
+        </TouchableOpacity>
         <View
           style={{
             alignSelf: 'flex-end',
@@ -184,7 +193,7 @@ const Acceptor = props => {
           </Text>
         </TouchableOpacity> */}
           <AppButton
-             height={Metrix.VerticalSize(50)}
+            height={Metrix.VerticalSize(50)}
             onPress={() => props.navigation.navigate('Status')}
             width="100%"
             title="See Your Ads Status"
@@ -225,7 +234,13 @@ const Acceptor = props => {
               <Input
                 placeholder="Applicant ContactNo"
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                  if (+e) {
+                    onChange(e);
+                  } else {
+                    onChange('');
+                  }
+                }}
                 maxLength={11}
               />
             );
@@ -243,8 +258,15 @@ const Acceptor = props => {
               <Input
                 placeholder="Applicant CNIC No"
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                  if (+e) {
+                    onChange(e);
+                  } else {
+                    onChange('');
+                  }
+                }}
                 maxLength={13}
+                keyboardType="numeric"
               />
             );
           }}
@@ -323,7 +345,13 @@ const Acceptor = props => {
               <Input
                 placeholder="Applicant Salary"
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                  if (+e) {
+                    onChange(e);
+                  } else {
+                    onChange('');
+                  }
+                }}
               />
             );
           }}
@@ -349,7 +377,7 @@ const Acceptor = props => {
                     alignItems: 'center',
                   }}>
                   <AppButton
-                   height={Metrix.VerticalSize(50)}
+                    height={Metrix.VerticalSize(50)}
                     width="100%"
                     onPress={() => selectIamge(onChange)}
                     title="Choose File"
@@ -439,7 +467,13 @@ const Acceptor = props => {
               <Input
                 placeholder="Guardian CNIC"
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                  if (+e) {
+                    onChange(e);
+                  } else {
+                    onChange('');
+                  }
+                }}
                 maxLength={13}
               />
             );
@@ -474,7 +508,13 @@ const Acceptor = props => {
               <Input
                 placeholder="Guardian Salary"
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                  if (+e) {
+                    onChange(e);
+                  } else {
+                    onChange('');
+                  }
+                }}
               />
             );
           }}
@@ -500,7 +540,7 @@ const Acceptor = props => {
                     alignItems: 'center',
                   }}>
                   <AppButton
-                   height={Metrix.VerticalSize(50)}
+                    height={Metrix.VerticalSize(50)}
                     width="100%"
                     onPress={() => selectIamge(onChange)}
                     title="Choose File"
@@ -547,7 +587,7 @@ const Acceptor = props => {
             alignItems: 'center',
           }}>
           <AppButton
-           height={Metrix.VerticalSize(50)}
+            height={Metrix.VerticalSize(50)}
             width={'100%'}
             onPress={() => setShowDatePicker(true)}
             title={
@@ -728,7 +768,7 @@ const Acceptor = props => {
             marginBottom: Metrix.VerticalSize(30),
           }}>
           <AppButton
-           height={Metrix.VerticalSize(60)}
+            height={Metrix.VerticalSize(60)}
             onPress={() => {
               handleSubmit(submit)();
             }}
