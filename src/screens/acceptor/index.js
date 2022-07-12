@@ -101,14 +101,14 @@ const Acceptor = props => {
       applicantContactNo: formData.applicantContact,
       applicantJobOccupation: formData.applicantJobOcc,
       applicantName: formData.applicantName,
-      applicantSalary: formData.applicantSalary,
+      applicantSalary: Number(formData.applicantSalary),
       deliveryDate: formData.adDeliveryDate,
       electricityBillImage: formData.electricityBillImage,
-      guardianCNIC: formData.guardianCnic,
+      guardianCNIC: Number(formData.guardianCnic),
       guardianJobOccupation: formData.guardianJobOcc,
       guardianName: formData.guardianName,
       guardianRelationWithApplicant: formData.guardianRelation,
-      guardianSalary: formData.guardianSalary,
+      guardianSalary: Number(formData.guardianSalary),
       houseOwnership: formData.houseOwner,
       itemsNeeded: formData.itemsNeeded,
       totalAmount: 39082,
@@ -146,8 +146,8 @@ const Acceptor = props => {
     }
   };
   const needed = [
-    'Bed set (Bed, Matress, Wardrobe)',
-    'Washing Machine',
+    'Bed set (Bed, Mattress, Wardrobe)',
+    'Washing machine',
     'Refrigerator',
     'Crockery',
     'Grinder',
@@ -218,6 +218,7 @@ const Acceptor = props => {
                 placeholder="ApplicantName"
                 value={value}
                 onChange={onChange}
+                maxLength={100}
               />
             );
           }}
@@ -235,13 +236,14 @@ const Acceptor = props => {
                 placeholder="Applicant ContactNo"
                 value={value}
                 onChange={e => {
-                  if (+e) {
+                  console.log(Number(e)=="0")
+                  if (+e || Number(e)=="0") {
                     onChange(e);
                   } else {
                     onChange('');
                   }
                 }}
-                maxLength={11}
+                maxLength={100}
               />
             );
           }}
@@ -259,7 +261,7 @@ const Acceptor = props => {
                 placeholder="Applicant CNIC No"
                 value={value}
                 onChange={e => {
-                  if (+e) {
+                  if (+e || Number(e)=="0") {
                     onChange(e);
                   } else {
                     onChange('');
@@ -468,7 +470,7 @@ const Acceptor = props => {
                 placeholder="Guardian CNIC"
                 value={value}
                 onChange={e => {
-                  if (+e) {
+                  if (+e || Number(e)=="0") {
                     onChange(e);
                   } else {
                     onChange('');
@@ -660,10 +662,10 @@ const Acceptor = props => {
                 <CheckBoxWithText
                   ind={1}
                   onChnage={onChange}
-                  text={'Bed set (Bed, Matress, Wardrobe)'}
+                  text={'Bed set (Bed, Mattress, Wardrobe)'}
                   itemPresent={getValues('itemsNeeded')}
                   value={getValues('itemsNeeded').includes(
-                    'Bed set (Bed, Matress, Wardrobe)',
+                    'Bed set (Bed, Mattress, Wardrobe)',
                   )}
                 />
               );
@@ -677,9 +679,9 @@ const Acceptor = props => {
                 <CheckBoxWithText
                   ind={2}
                   onChnage={onChange}
-                  text={'Washing Machine'}
+                  text={'Washing machine'}
                   itemPresent={getValues('itemsNeeded')}
-                  value={getValues('itemsNeeded').includes('Washing Machine')}
+                  value={getValues('itemsNeeded').includes('Washing machine')}
                 />
               );
             }}
